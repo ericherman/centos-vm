@@ -1,0 +1,24 @@
+--- orig/iso/isolinux/isolinux.cfg	2021-07-11 12:17:31.087997298 +0200
++++ next/iso/isolinux/isolinux.cfg	2021-07-11 12:37:07.570722739 +0200
+@@ -1,5 +1,5 @@
+ default vesamenu.c32
+-timeout 600
++timeout 100
+ 
+ display boot.msg
+ 
+@@ -60,12 +60,12 @@
+ 
+ label linux
+   menu label ^Install CentOS Linux 8
++  menu default
+   kernel vmlinuz
+-  append initrd=initrd.img inst.stage2=hd:LABEL=CentOS-8-4-2105-x86_64-dvd quiet
++  append initrd=initrd.img inst.ks=hd:LABEL=CentOS-8.4-AutoInstall:/isolinux/ks/ks.cfg inst.stage2=hd:LABEL=CentOS-8.4-AutoInstall quiet
+ 
+ label check
+   menu label Test this ^media & install CentOS Linux 8
+-  menu default
+   kernel vmlinuz
+   append initrd=initrd.img inst.stage2=hd:LABEL=CentOS-8-4-2105-x86_64-dvd rd.live.check quiet
+ 

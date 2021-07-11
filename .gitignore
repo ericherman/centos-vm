@@ -1,6 +1,7 @@
 iso
 *.iso
 *.qcow2
+*.pid
 
 id_rsa_host_tmp
 id_rsa_host_tmp.pub
