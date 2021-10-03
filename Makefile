@@ -69,11 +69,13 @@ spotless:
 
 
 $(CENTOS_ORIG_ISO):
+	@echo "begin $@"
 	wget $(CENTOS_ISO_URL)
 	ls -l $@
 	@echo "SUCCESS $@"
 
 vm_root_password:
+	@echo "begin $@"
 	touch vm_root_password
 	chmod -v 600 vm_root_password
 	cat /dev/urandom \
@@ -85,6 +87,7 @@ vm_root_password:
 	@echo "SUCCESS $@"
 
 iso/isolinux/ks/ks.cfg: $(CENTOS_ORIG_ISO) vm_root_password
+	@echo "begin $@"
 	mkdir -pv iso
 	cd iso && 7z x ../$<
 	patch -Np1 -i $(ISOLINUX_CFG_PATCH)
@@ -97,25 +100,30 @@ iso/isolinux/ks/ks.cfg: $(CENTOS_ORIG_ISO) vm_root_password
 	@echo "SUCCESS $@"
 
 id_rsa_tmp:
+	@echo "begin $@"
 	ssh-keygen -b 4096 -t rsa -N "" -C "temporary-key" -f ./id_rsa_tmp
 	ls -l id_rsa_tmp
 	@echo "SUCCESS $@"
 
 id_rsa_tmp.pub: id_rsa_tmp
+	@echo "begin $@"
 	ls -l id_rsa_tmp.pub
 	@echo "SUCCESS $@"
 
 id_rsa_host_tmp:
+	@echo "begin $@"
 	ssh-keygen -b 4096 -t rsa -N "" -C "temp-host-key" -f ./id_rsa_host_tmp
 	ls -l id_rsa_host_tmp
 	@echo "SUCCESS $@"
 
 id_rsa_host_tmp.pub: id_rsa_host_tmp
+	@echo "begin $@"
 	ls -l id_rsa_host_tmp.pub
 	@echo "SUCCESS $@"
 
 iso/authorized_keys_tmp: iso/isolinux/ks/ks.cfg id_rsa_tmp.pub \
 		id_rsa_host_tmp.pub id_rsa_host_tmp
+	@echo "begin $@"
 	cp -v ./id_rsa_tmp.pub		iso/authorized_keys_tmp
 	cp -v ./id_rsa_host_tmp		iso/id_rsa_host_tmp
 	cp -v ./id_rsa_host_tmp.pub	iso/id_rsa_host_tmp.pub
@@ -124,6 +132,7 @@ iso/authorized_keys_tmp: iso/isolinux/ks/ks.cfg id_rsa_tmp.pub \
 
 # generate the new iso install image
 $(ISO_TARGET): iso/authorized_keys_tmp
+	@echo "begin $@"
 	genisoimage -o $@ -b isolinux/isolinux.bin -c isolinux/boot.cat \
 		-no-emul-boot -boot-load-size 4 -boot-info-table -J -R \
 		-V "$(ISO_TARGET_VOLUME)" iso
@@ -131,6 +140,7 @@ $(ISO_TARGET): iso/authorized_keys_tmp
 	@echo "SUCCESS $@"
 
 $(TARGET_QCOW2): $(ISO_TARGET)
+	@echo "begin $@"
 	{ lsof -i:$(VM_PORT_SSH); if [ $$? -eq 0 ]; then \
 		echo "port $(VM_PORT_SSH) not free"; false; fi; }
 	qemu-img create -f qcow2 tmp.qcow2 $(INITIAL_DISK_SIZE)
@@ -144,6 +154,7 @@ $(TARGET_QCOW2): $(ISO_TARGET)
 	@echo "SUCCESS $@"
 
 launch-base-vm: $(TARGET_QCOW2)
+	@echo "begin $@"
 	{ lsof -i:$(VM_PORT_SSH); if [ $$? -eq 0 ]; then \
 		echo "port $(VM_PORT_SSH) not free"; false; fi; }
 	{ qemu-system-x86_64 -hda $(TARGET_QCOW2) \
@@ -166,9 +177,11 @@ hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22 & \
 	echo ssh -i ./id_rsa_tmp -p$(VM_PORT_SSH) \
 		-oNoHostAuthenticationForLocalhost=yes \
 		root@127.0.0.1
+	@echo "SUCCESS $@"
 	echo "$@ kvm running"
 
 shutdown-kvm:
+	@echo "begin $@"
 	ssh -p$(VM_PORT_SSH) \
 		-oNoHostAuthenticationForLocalhost=yes \
 		root@127.0.0.1 \
