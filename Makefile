@@ -23,16 +23,17 @@
 
 SHELL=/bin/bash
 
-CENTOS_MIRROR_BASE ?= http://linux-mirrors.fnal.gov/linux/centos
 
 CENTOS_VERSION ?= 8.3
 CENTOS_FULL_VERSION ?= 8.3.2011
+CENTOS_MIRROR_BASE ?= https://vault.centos.org
 CENTOS_ORIG_ISO ?= CentOS-$(CENTOS_FULL_VERSION)-x86_64-minimal.iso
 
 # CENTOS_VERSION ?= 8.4
 # CENTOS_FULL_VERSION ?= 8.4.2105
+# CENTOS_MIRROR_BASE ?= http://linux-mirrors.fnal.gov/linux/centos
+# CENTOS_ORIG_ISO ?= CentOS-$(CENTOS_FULL_VERSION)-x86_64-dvd1.iso
 
-CENTOS_ORIG_ISO ?= CentOS-$(CENTOS_FULL_VERSION)-x86_64-dvd1.iso
 CENTOS_ISO_URL_BASE ?= $(CENTOS_MIRROR_BASE)/$(CENTOS_FULL_VERSION)/isos/x86_64
 CENTOS_ISO_URL ?= $(CENTOS_ISO_URL_BASE)/$(CENTOS_ORIG_ISO)
 
