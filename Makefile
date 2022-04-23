@@ -23,26 +23,15 @@
 
 SHELL=/bin/bash
 
+DISTRO_VERSION ?= 8.5
+DISTRO_ISO_URL ?= https://download.rockylinux.org/pub/rocky/8/isos/x86_64/Rocky-8.5-x86_64-minimal.iso
+KICKSTART_CFG ?= rocky-$(DISTRO_VERSION)-kickstart.cfg
+DISTRO_ORIG_ISO ?= Rocky-8.5-x86_64-minimal.iso
 
-CENTOS_VERSION ?= 8.3
-CENTOS_FULL_VERSION ?= 8.3.2011
-CENTOS_MIRROR_BASE ?= https://vault.centos.org
-CENTOS_ORIG_ISO ?= CentOS-$(CENTOS_FULL_VERSION)-x86_64-minimal.iso
-
-# CENTOS_VERSION ?= 8.4
-# CENTOS_FULL_VERSION ?= 8.4.2105
-# CENTOS_MIRROR_BASE ?= http://linux-mirrors.fnal.gov/linux/centos
-# CENTOS_ORIG_ISO ?= CentOS-$(CENTOS_FULL_VERSION)-x86_64-dvd1.iso
-
-CENTOS_ISO_URL_BASE ?= $(CENTOS_MIRROR_BASE)/$(CENTOS_FULL_VERSION)/isos/x86_64
-CENTOS_ISO_URL ?= $(CENTOS_ISO_URL_BASE)/$(CENTOS_ORIG_ISO)
-
-KICKSTART_CFG ?= centos-$(CENTOS_VERSION)-kickstart.cfg
-ISOLINUX_CFG_PATCH ?= centos-$(CENTOS_VERSION)-isolinux.cfg.patch
-
-ISO_TARGET_VOLUME ?= CentOS-$(CENTOS_VERSION)-AutoInstall
-ISO_TARGET ?= centos-$(CENTOS_VERSION)-autoinstall.iso
-TARGET_QCOW2 ?= basic-centos-$(CENTOS_VERSION)-vm.qcow2
+ISOLINUX_CFG_PATCH ?= rocky-$(DISTRO_VERSION)-isolinux.cfg.patch
+ISO_TARGET_VOLUME ?= Rocky-$(DISTRO_VERSION)-AutoInstall
+ISO_TARGET ?= rocky-$(DISTRO_VERSION)-autoinstall.iso
+TARGET_QCOW2 ?= basic-rocky-$(DISTRO_VERSION)-vm.qcow2
 
 # set VM_HOSTNAME if not already set
 VM_HOSTNAME ?= vm0
@@ -69,9 +58,9 @@ spotless:
 	git submodule foreach --recursive git clean -dffx
 
 
-$(CENTOS_ORIG_ISO):
+$(DISTRO_ORIG_ISO):
 	@echo "begin $@"
-	wget $(CENTOS_ISO_URL)
+	wget $(DISTRO_ISO_URL) --output-document=$@
 	ls -l $@
 	@echo "SUCCESS $@"
 
@@ -87,7 +76,7 @@ vm_root_password:
 	ls -l vm_root_password
 	@echo "SUCCESS $@"
 
-iso/isolinux/ks/ks.cfg: $(CENTOS_ORIG_ISO) vm_root_password
+iso/isolinux/ks/ks.cfg: $(DISTRO_ORIG_ISO) vm_root_password
 	@echo "begin $@"
 	mkdir -pv iso
 	cd iso && 7z x ../$<

@@ -1,0 +1,29 @@
+--- orig/iso/isolinux/isolinux.cfg
++++ next/iso/isolinux/isolinux.cfg
+@@ -1,5 +1,5 @@
+ default vesamenu.c32
+-timeout 600
++timeout 10
+ 
+ display boot.msg
+ 
+@@ -59,13 +59,18 @@
+ menu separator # insert an empty line
+ 
+ label linux
++  menu label ^Auto Install Rocky Linux 8
++  menu default
++  kernel vmlinuz
++  append initrd=initrd.img inst.ks=hd:LABEL=Rocky-8.5-AutoInstall:/isolinux/ks/ks.cfg inst.stage2=hd:LABEL=Rocky-8.5-AutoInstall
++
++label linux
+   menu label ^Install Rocky Linux 8
+   kernel vmlinuz
+   append initrd=initrd.img inst.stage2=hd:LABEL=Rocky-8-5-x86_64-dvd quiet
+ 
+ label check
+   menu label Test this ^media & install Rocky Linux 8
+-  menu default
+   kernel vmlinuz
+   append initrd=initrd.img inst.stage2=hd:LABEL=Rocky-8-5-x86_64-dvd rd.live.check quiet
+ 
