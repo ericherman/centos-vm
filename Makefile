@@ -136,7 +136,7 @@ $(TARGET_QCOW2): $(ISO_TARGET)
 	qemu-img create -f qcow2 tmp.qcow2 $(INITIAL_DISK_SIZE)
 	qemu-system-x86_64 -hda tmp.qcow2 -cdrom $(ISO_TARGET) \
 		-m $(KVM_INSTALL_RAM) -smp $(KVM_CORES) \
-		-machine type=pc,accel=kvm \
+		-machine type=q35,accel=kvm:tcg \
 		-display none \
 		-nic user,hostfwd=tcp:127.0.0.1:$(VM_PORT_SSH)-:22
 	mv tmp.qcow2 $(TARGET_QCOW2)
