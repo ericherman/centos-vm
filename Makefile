@@ -23,10 +23,10 @@
 
 SHELL=/bin/bash
 
-DISTRO_VERSION ?= 8.5
-DISTRO_ISO_URL ?= https://download.rockylinux.org/pub/rocky/8/isos/x86_64/Rocky-8.5-x86_64-minimal.iso
+DISTRO_VERSION ?= 8.7
+DISTRO_ISO_URL ?= https://download.rockylinux.org/pub/rocky/8/isos/x86_64/Rocky-8.7-x86_64-minimal.iso
 KICKSTART_CFG ?= rocky-$(DISTRO_VERSION)-kickstart.cfg
-DISTRO_ORIG_ISO ?= Rocky-8.5-x86_64-minimal.iso
+DISTRO_ORIG_ISO ?= Rocky-8.7-x86_64-minimal.iso
 
 ISOLINUX_CFG_PATCH ?= rocky-$(DISTRO_VERSION)-isolinux.cfg.patch
 ISO_TARGET_VOLUME ?= Rocky-$(DISTRO_VERSION)-AutoInstall
