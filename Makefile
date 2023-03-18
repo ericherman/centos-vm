@@ -148,7 +148,8 @@ launch-base-vm: $(TARGET_QCOW2)
 	{ lsof -i:$(VM_PORT_SSH); if [ $$? -eq 0 ]; then \
 		echo "port $(VM_PORT_SSH) not free"; false; fi; }
 	{ qemu-system-x86_64 -hda $(TARGET_QCOW2) \
-		-m $(KVM_RAM) -smp $(KVM_CORES) -machine type=pc,accel=kvm \
+		-m $(KVM_RAM) -smp $(KVM_CORES) \
+		-machine type=q35,accel=kvm:tcg \
 		-display none \
 		-nic user,\
 hostfwd=tcp:127.0.0.1:$(VM_PORT_HTTPS)-:443,\
